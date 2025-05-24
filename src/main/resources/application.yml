@@ -1,0 +1,120 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      routes:
+        - id: ACCOUNT-SERVICE
+          uri: lb://ACCOUNT-SERVICE
+          predicates:
+            - Path=/account/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: accountCircuitBreaker
+                fallbackUri: forward:/accountServiceFallback
+
+        - id: AUTH-SERVICE
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/auth/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: authCircuitBreaker
+                fallbackUri: forward:/authServiceFallback
+
+        - id: CARD-SERVICE
+          uri: lb://CARD-SERVICE
+          predicates:
+            - Path=/card/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: cardCircuitBreaker
+                fallbackUri: forward:/cardServiceFallback
+
+        - id: LOAN-SERVICE
+          uri: lb://LOAN-SERVICE
+          predicates:
+            - Path=/loan/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: loanCircuitBreaker
+                fallbackUri: forward:/loanServiceFallback
+
+        - id: REPORTING-SERVICE
+          uri: lb://REPORTING-SERVICE
+          predicates:
+            - Path=/reporting/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: reportingCircuitBreaker
+                fallbackUri: forward:/reportingServiceFallback
+
+        - id: SUPPORT-SERVICE
+          uri: lb://SUPPORT-SERVICE
+          predicates:
+            - Path=/support/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: supportCircuitBreaker
+                fallbackUri: forward:/supportServiceFallback
+
+        - id: TRANSACTION-SERVICE
+          uri: lb://TRANSACTION-SERVICE
+          predicates:
+            - Path=/transaction/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: transactionCircuitBreaker
+                fallbackUri: forward:/transactionServiceFallback
+
+# Configuration de Resilience4j pour affiner les Circuit Breakers
+resilience4j:
+  circuitbreaker:
+    instances:
+      accountCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+      authCircuitBreaker:
+        slidingWindowSize: 8
+        minimumNumberOfCalls: 4
+        failureRateThreshold: 60
+      cardCircuitBreaker:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+      loanCircuitBreaker:
+        slidingWindowSize: 12
+        failureRateThreshold: 40
+      reportingCircuitBreaker:
+        slidingWindowSize: 6
+        failureRateThreshold: 50
+      supportCircuitBreaker:
+        slidingWindowSize: 6
+        failureRateThreshold: 50
+      transactionCircuitBreaker:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+
+# Expose l'endpoint actuator pour le monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,breakerevents
+  endpoint:
+    health:
+      show-details: always
