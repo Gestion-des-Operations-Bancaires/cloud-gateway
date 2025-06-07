@@ -11,7 +11,7 @@ spring:
         - id: ACCOUNT-SERVICE
           uri: lb://ACCOUNT-SERVICE
           predicates:
-            - Path=/account/**
+            - Path=/api/account/**
           filters:
             - name: CircuitBreaker
               args:
@@ -21,7 +21,7 @@ spring:
         - id: AUTH-SERVICE
           uri: lb://AUTH-SERVICE
           predicates:
-            - Path=/auth/**
+            - Path=/api/auth/**
           filters:
             - name: CircuitBreaker
               args:
@@ -31,7 +31,7 @@ spring:
         - id: CARD-SERVICE
           uri: lb://CARD-SERVICE
           predicates:
-            - Path=/card/**
+            - Path=/api/card/**
           filters:
             - name: CircuitBreaker
               args:
@@ -41,7 +41,7 @@ spring:
         - id: LOAN-SERVICE
           uri: lb://LOAN-SERVICE
           predicates:
-            - Path=/loan/**
+            - Path=/api/loan/**
           filters:
             - name: CircuitBreaker
               args:
@@ -51,7 +51,7 @@ spring:
         - id: REPORTING-SERVICE
           uri: lb://REPORTING-SERVICE
           predicates:
-            - Path=/reporting/**
+            - Path=/api/reporting/**
           filters:
             - name: CircuitBreaker
               args:
@@ -61,7 +61,7 @@ spring:
         - id: SUPPORT-SERVICE
           uri: lb://SUPPORT-SERVICE
           predicates:
-            - Path=/support/**
+            - Path=/api/support/**
           filters:
             - name: CircuitBreaker
               args:
@@ -71,7 +71,7 @@ spring:
         - id: TRANSACTION-SERVICE
           uri: lb://TRANSACTION-SERVICE
           predicates:
-            - Path=/transaction/**
+            - Path=/api/transaction/**
           filters:
             - name: CircuitBreaker
               args:
